@@ -21,11 +21,11 @@ def tic_tac_toe():
         }
     }
     while play_again:
+        print(f'players = {players}')
         board = start_game(players)
         still_playing = input('Are you ready to play? Enter Yes or No: ').lower() in ('yes', 'y')
         turn_count = 1
         while still_playing:
-            print(f'players = {players}')
             turn_player = '1' if players['1']['turn_player'] else '2'
             turn_player_symbol = players[turn_player]['symbol']
             print(display_board(board))
@@ -62,13 +62,17 @@ def display_board(symbol_positions):
         board += '\n   |   |\n'
         for column in range(3):
             board += f' {symbol_positions[row][column]} |' if (column + 1) % 3 != 0 else f' {symbol_positions[row][column]} \n'
-        board += '   |   |\n___________\n' if (row + 1) % 3 != 0 else '   |   |\n'
+        board += '   |   |\n-----------' if (row + 1) % 3 != 0 else '   |   |\n'
     return board        
 
 def ask_for_position(board, players, player, symbol):
     valid_move = False
     while not valid_move:
-        position = int(input(f'Player {player}, please select an available position: '))
+        try:
+            position = int(input(f'Player {player}, please select an available position: '))
+        except ValueError:
+            print('Please enter a value between 1 and 9')
+            continue
         if check_for_valid_move(position, board, symbol):
             valid_move = True
         else:
